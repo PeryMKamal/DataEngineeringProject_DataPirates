@@ -29,298 +29,7 @@
 
 
 
-```python
 
-```
-
-```python
-import pandas as pd
-import datetime # to handle date/time attributes
-from os import listdir # os is a module for interacting with the OS
-from os.path import isfile, join # to verify file object, and concatenate paths
-import glob # to find pathnames matching a specific pattern
-import re # regular expressions :)
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-```
-
-
-```python
-NobelData = pd.read_csv("archiveData_Cleaned.csv")
-NobelData
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Unnamed: 0</th>
-      <th>Year</th>
-      <th>Category</th>
-      <th>Prize</th>
-      <th>Prize Share</th>
-      <th>Laureate ID</th>
-      <th>Laureate Type</th>
-      <th>Full Name</th>
-      <th>Birth Date</th>
-      <th>Birth City</th>
-      <th>Birth Country</th>
-      <th>Sex</th>
-      <th>Organization Name</th>
-      <th>Organization City</th>
-      <th>Organization Country</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0</td>
-      <td>1901</td>
-      <td>Chemistry</td>
-      <td>The Nobel Prize in Chemistry 1901</td>
-      <td>1/1</td>
-      <td>160</td>
-      <td>Individual</td>
-      <td>Jacobus Henricus van 't Hoff</td>
-      <td>1852-08-30</td>
-      <td>Rotterdam</td>
-      <td>Netherlands</td>
-      <td>Male</td>
-      <td>Berlin University</td>
-      <td>Berlin</td>
-      <td>Germany</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>1901</td>
-      <td>Literature</td>
-      <td>The Nobel Prize in Literature 1901</td>
-      <td>1/1</td>
-      <td>569</td>
-      <td>Individual</td>
-      <td>Sully Prudhomme</td>
-      <td>1839-03-16</td>
-      <td>Paris</td>
-      <td>France</td>
-      <td>Male</td>
-      <td>Self</td>
-      <td>Self</td>
-      <td>Self</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>1901</td>
-      <td>Medicine</td>
-      <td>The Nobel Prize in Physiology or Medicine 1901</td>
-      <td>1/1</td>
-      <td>293</td>
-      <td>Individual</td>
-      <td>Emil Adolf von Behring</td>
-      <td>1854-03-15</td>
-      <td>Hansdorf (Lawice)</td>
-      <td>Prussia (Poland)</td>
-      <td>Male</td>
-      <td>Marburg University</td>
-      <td>Marburg</td>
-      <td>Germany</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>1901</td>
-      <td>Peace</td>
-      <td>The Nobel Peace Prize 1901</td>
-      <td>1/2</td>
-      <td>462</td>
-      <td>Individual</td>
-      <td>Jean Henry Dunant</td>
-      <td>1828-05-08</td>
-      <td>Geneva</td>
-      <td>Switzerland</td>
-      <td>Male</td>
-      <td>Self</td>
-      <td>Self</td>
-      <td>Self</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>1901</td>
-      <td>Peace</td>
-      <td>The Nobel Peace Prize 1901</td>
-      <td>1/2</td>
-      <td>463</td>
-      <td>Individual</td>
-      <td>Frédéric Passy</td>
-      <td>1822-05-20</td>
-      <td>Paris</td>
-      <td>France</td>
-      <td>Male</td>
-      <td>Self</td>
-      <td>Self</td>
-      <td>Self</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>876</th>
-      <td>964</td>
-      <td>2016</td>
-      <td>Medicine</td>
-      <td>The Nobel Prize in Physiology or Medicine 2016</td>
-      <td>1/1</td>
-      <td>927</td>
-      <td>Individual</td>
-      <td>Yoshinori Ohsumi</td>
-      <td>1945-02-09</td>
-      <td>Fukuoka</td>
-      <td>Japan</td>
-      <td>Male</td>
-      <td>Tokyo Institute of Technology</td>
-      <td>Tokyo</td>
-      <td>Japan</td>
-    </tr>
-    <tr>
-      <th>877</th>
-      <td>965</td>
-      <td>2016</td>
-      <td>Peace</td>
-      <td>The Nobel Peace Prize 2016</td>
-      <td>1/1</td>
-      <td>934</td>
-      <td>Individual</td>
-      <td>Juan Manuel Santos</td>
-      <td>1951-08-10</td>
-      <td>Bogotá</td>
-      <td>Colombia</td>
-      <td>Male</td>
-      <td>Self</td>
-      <td>Self</td>
-      <td>Self</td>
-    </tr>
-    <tr>
-      <th>878</th>
-      <td>966</td>
-      <td>2016</td>
-      <td>Physics</td>
-      <td>The Nobel Prize in Physics 2016</td>
-      <td>1/2</td>
-      <td>928</td>
-      <td>Individual</td>
-      <td>David J. Thouless</td>
-      <td>1934-09-21</td>
-      <td>Bearsden</td>
-      <td>United Kingdom</td>
-      <td>Male</td>
-      <td>University of Washington</td>
-      <td>Seattle, WA</td>
-      <td>United States of America</td>
-    </tr>
-    <tr>
-      <th>879</th>
-      <td>967</td>
-      <td>2016</td>
-      <td>Physics</td>
-      <td>The Nobel Prize in Physics 2016</td>
-      <td>1/4</td>
-      <td>929</td>
-      <td>Individual</td>
-      <td>F. Duncan M. Haldane</td>
-      <td>1951-09-14</td>
-      <td>London</td>
-      <td>United Kingdom</td>
-      <td>Male</td>
-      <td>Princeton University</td>
-      <td>Princeton, NJ</td>
-      <td>United States of America</td>
-    </tr>
-    <tr>
-      <th>880</th>
-      <td>968</td>
-      <td>2016</td>
-      <td>Physics</td>
-      <td>The Nobel Prize in Physics 2016</td>
-      <td>1/4</td>
-      <td>930</td>
-      <td>Individual</td>
-      <td>J. Michael Kosterlitz</td>
-      <td>1943-06-22</td>
-      <td>Aberdeen</td>
-      <td>United Kingdom</td>
-      <td>Male</td>
-      <td>Brown University</td>
-      <td>Providence, RI</td>
-      <td>United States of America</td>
-    </tr>
-  </tbody>
-</table>
-<p>881 rows × 15 columns</p>
-</div>
-
-
-
-## Creating data frames for each prize category for visualization
-
-
-```python
-Chemistry = NobelData[(NobelData.Category == 'Chemistry')]
-Economics = NobelData[(NobelData.Category == 'Economics')]
-Literature = NobelData[(NobelData.Category == 'Literature')]
-Medicine = NobelData[(NobelData.Category == 'Medicine')]
-Peace = NobelData[(NobelData.Category == 'Peace')]
-Physics = NobelData[(NobelData.Category == 'Physics')]
-
-```
-
-## Nobel Prizes by Category from 1901 to 2016
-
-
-```python
-YearCategory=NobelData.groupby(['Year','Category'])['Laureate ID'].count().reset_index()
-YearCategory
-g = sns.FacetGrid(YearCategory, col='Category', hue='Category', col_wrap=8, )
-g = g.map(plt.plot, 'Year', 'Laureate ID')
-g = g.map(plt.fill_between, 'Year', 'Laureate ID', alpha=0.1).set_titles("{col_name} Category")
-g = g.set_titles("{col_name}")
-plt.show()
-```
 
 
 ![png](DataVisualization_files/DataVisualization_5_0.png)
@@ -328,31 +37,11 @@ plt.show()
 
 ## Number of Nobel Prizes in each category
 
-
-```python
-
-NobelCategory=NobelData['Category'].value_counts()
-sns.barplot(x=NobelCategory.index,y=NobelCategory.values)
-plt.xticks(rotation=90)
-plt.title('Nobel Prizes by Category')
-plt.show()
-```
-
-
 ![png](DataVisualization_files/DataVisualization_7_0.png)
 
 
 ## Visualization of number of prizes in each country in every category, USA dominance
 
-
-```python
-
-plt.figure(figsize=(6,22))
-DataGraph = sns.countplot(y="Birth Country", data=NobelData,
-              order=NobelData['Birth Country'].value_counts().index,
-              palette='GnBu_d')
-plt.show()
-```
 
 
 ![png](DataVisualization_files/DataVisualization_9_0.png)
@@ -361,13 +50,7 @@ plt.show()
 ## Visualization of number of prizes in each country in Chemistry category
 
 
-```python
-plt.figure(figsize=(12,12))
-ChemestryGraph = sns.countplot(y="Birth Country", data=Chemistry,
-              order=Chemistry['Birth Country'].value_counts().index,
-              palette='GnBu_d')
-plt.show()
-```
+
 
 
 ![png](DataVisualization_files/DataVisualization_11_0.png)
@@ -376,95 +59,21 @@ plt.show()
 ## Visualization of number of prizes in each country in Economics category
 
 
-```python
-plt.figure(figsize=(12,12))
-EconomicsGraph = sns.countplot(y="Birth Country", data=Economics,
-              order=Economics['Birth Country'].value_counts().index,
-              palette='GnBu_d')
-plt.show()
-```
-
-
 ![png](DataVisualization_files/DataVisualization_13_0.png)
 
 
 ## Visualization of number of prizes in each country in Literature category
 
 
-```python
-plt.figure(figsize=(12,12))
-LiteratureGraph = sns.countplot(y="Birth Country", data=Literature,
-              order=Literature['Birth Country'].value_counts().index,
-              palette='GnBu_d')
-plt.show()
-```
 
 
 ![png](DataVisualization_files/DataVisualization_15_0.png)
 
 
-## Visualization of number of prizes in each country in Medicine category
 
-
-```python
-plt.figure(figsize=(12,12))
-MedicineGraph = sns.countplot(y="Birth Country", data=Medicine,
-              order=Medicine['Birth Country'].value_counts().index,
-              palette='GnBu_d')
-plt.show()
-```
-
-
-![png](DataVisualization_files/DataVisualization_17_0.png)
-
-
-## Visualization of number of prizes in each country in Peace category
-
-
-```python
-plt.figure(figsize=(12,12))
-PeaceGraph = sns.countplot(y="Birth Country", data=Peace,
-              order=Peace['Birth Country'].value_counts().index,
-              palette='GnBu_d')
-plt.show()
-```
-
-
-![png](DataVisualization_files/DataVisualization_19_0.png)
-
-
-## Visualization of number of prizes in each country in Physics category
-
-
-```python
-plt.figure(figsize=(12,12))
-PhysicsGraph = sns.countplot(y="Birth Country", data=Physics,
-              order=Physics['Birth Country'].value_counts().index,
-              palette='GnBu_d')
-plt.show()
-```
-
-
-![png](DataVisualization_files/DataVisualization_21_0.png)
 
 
 ## Pie chart for the whole dataframe gender, which gender is most likely to win a nobel prize?
-
-
-```python
-from matplotlib.pyplot import pie, axis, show
-
-AllCategoryGender = NobelData['Sex'].value_counts()
-print(AllCategoryGender)
-
-pie(AllCategoryGender, labels=AllCategoryGender.index, autopct='%1.1f%%');
-show()
-```
-
-    Male      833
-    Female     48
-    Name: Sex, dtype: int64
-    
 
 
 ![png](DataVisualization_files/DataVisualization_23_1.png)
